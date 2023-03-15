@@ -1,0 +1,8 @@
+# python cache
+__pycache__/
+
+# IDE files
+.vscode/
+
+# developing
+tools/
