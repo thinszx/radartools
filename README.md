@@ -15,7 +15,7 @@
 
 - [x] Detailed examples.
 - [ ] Supply as Python package.
-- [ ] Support GPU acceleration.
+- [x] Support GPU acceleration.
 - [ ] Export data as multiple types.
 
 ## Examples
