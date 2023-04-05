@@ -9,8 +9,13 @@
             2. Process beamforming directly without crop.
             3. Read settings from test1_param.py.
 '''
-
-import numpy as np
+try:
+    import cupy as np
+except ImportError:
+    import numpy as np
+    import warnings
+    warnings.filterwarnings('always')
+    warnings.warn('Cupy is not installed, using numpy instead.', ImportWarning)
 from types import ModuleType
 
 from config.python_config import load_python_config
@@ -26,7 +31,7 @@ class BeamformingProcessor():
 
         # using this class doesn't matter the original config at all
         # this is just for easy reading and coding for you to know what is needed when processing
-        self.cfg = ModuleType('_','_')
+        self.cfg = ModuleType('_', '_')
         self.cfg.beamforming = self._all_config.beamforming
         self.cfg.constants = self._all_config.constants
         self.cfg.capture = self._all_config.capture
@@ -42,12 +47,12 @@ class BeamformingProcessor():
                 azi_idx_sum.append(taz+raz)
                 ele_idx_sum.append(tel+rel)
 
-        self.azi_size = np.max(azi_idx_sum) + 1 # the "+1" is to count for the 0-indexing used
-        self.ele_size = np.max(ele_idx_sum) + 1
+        self.azi_size = max(azi_idx_sum) + 1 # the "+1" is to count for the 0-indexing used
+        self.ele_size = max(ele_idx_sum) + 1
 
         self.azimuthonly_antnum = self.azi_size
         # select the index with the most azimuth antennas as the elevation index to perform 2D beamforming
-        most_azi_idx = azi_idx_sum.index(np.max(azi_idx_sum))
+        most_azi_idx = azi_idx_sum.index(max(azi_idx_sum))
         self.elevation_antidx = ele_idx_sum[most_azi_idx]
 
         # construct angle and range grids for beamforming process
@@ -70,6 +75,7 @@ class BeamformingProcessor():
         # TODO this might only be suitable for 2243, make this more flexible on other MIMO system?
         # TODO is the last chirp enough?
         azimuthonly_data = va_adc[:, -1, self.elevation_antidx, :].squeeze()
+        azimuthonly_data = np.array(azimuthonly_data, dtype=np.csingle) # convert to cupy array if possible
         return azimuthonly_data
 
     def process(self, va_adc) -> np.ndarray:
@@ -106,7 +112,11 @@ class BeamformingProcessor():
 
             aoatof_out = aoatof_reshape[xs_idx:xe_idx, ys_idx:ye_idx]
             aoatof_out = np.transpose(aoatof_out, (1, 0)) # make y axis first for plotting
+        else:
+            aoatof_out = np.transpose(aoatof_reshape, (1, 0)) # make y axis first for plotting
 
+        if hasattr(aoatof_out, 'get'):
+            aoatof_out = aoatof_out.get() # get cupy array back to numpy array to save
         return aoatof_out
 
     def _generate_angle_grid(self) -> np.ndarray:
@@ -120,7 +130,9 @@ class BeamformingProcessor():
         xmgs, ymgs = np.meshgrid(self._x_hor_list, self._y_hor_list)
         xmgs = xmgs.T.flatten(order='F')
         ymgs = ymgs.T.flatten(order='F')
-        aoasign = np.sign(np.spacing(1)+xmgs[:]).flatten(order='F') # eps avoid xmgs==0
+        # np.spacing(1) == np.finfo(np.float64).eps
+        eps = np.finfo(np.float64).eps
+        aoasign = np.sign(eps+xmgs[:]).flatten(order='F') # eps avoid xmgs==0
         
         aoas = 90*(1+aoasign) + (-aoasign) * np.rad2deg(np.arctan((ymgs[:]/(0.001+np.abs(xmgs[:])))))
         
@@ -129,6 +141,7 @@ class BeamformingProcessor():
         start_freq = self.cfg.capture['params']['start_freq']
         c = self.cfg.constants['C']
         angle_gridhor = np.exp(-1j*2*np.pi*p_1*start_freq*d*(np.cos(np.deg2rad(aoas))/c))
+        angle_gridhor = angle_gridhor.astype('csingle') # downsample the accuracy
         return angle_gridhor
 
     def _generate_range_grid(self) -> np.ndarray:
@@ -146,5 +159,5 @@ class BeamformingProcessor():
         ymgs = ymgs.T.flatten(order='F')
         tofs = np.sqrt(xmgs[:]**2+ymgs[:]**2) * 2
         range_gridhor = np.exp(-1j*2*np.pi*p_1*period*slope*tofs/c)
-        
+        range_gridhor = range_gridhor.astype('csingle') # downsample the accuracy
         return range_gridhor
