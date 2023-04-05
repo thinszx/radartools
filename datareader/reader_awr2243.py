@@ -49,6 +49,9 @@ class AWR2243Reader():
         assert self.slave1_recordings != None, "Error with slave1 data files"
         assert self.slave2_recordings != None, "Error with slave2 data files"
         assert self.slave3_recordings != None, "Error with slave3 data files"
+
+        # avoid reading the same data file multiple times
+        self._current_capture_info = [-1, (None, None, None)] # [capture_idx, (frame_num, datasize, timestamp)]
     
     def change_workdir(self, workdir):
         """Change the work directory of the AWR2243 data reader.
@@ -268,6 +271,11 @@ class AWR2243Reader():
         NOTE:
             Modified from example matlab script provided by Texas Instrument
         """
+        if capture_idx < 0:
+            raise ValueError("Invalid capture index {capture_idx}}")
+        # avoid reloading the same file
+        if self._current_capture_info[0] == capture_idx:
+            return self._current_capture_info[1]
         # Data type based on the structure of the file header
         dt = np.dtype([
             ("tag", np.uint32),
@@ -302,7 +310,10 @@ class AWR2243Reader():
             for log in data
         ])
 
-        return header[3], header[4], timestamps
+        frame_num = header[3]
+        data_size = header[4]
+        self._current_capture_info = [capture_idx, (frame_num, data_size, timestamps)]
+        return frame_num, data_size, timestamps
     
     def count_captures(self):
         """Get the count of captures recorded"""
