@@ -18,7 +18,7 @@ except ImportError:
     warnings.warn('Cupy is not installed, using numpy instead.', ImportWarning)
 from types import ModuleType
 
-from config.python_config import load_python_config
+from ...config.python_config import load_python_config
 
 
 

@@ -102,7 +102,7 @@ class LiveAWR2243Reader():
         # TODO save frame
         return frame
 
-    def is_server_running(self, serverip, serverport, timeout) -> tuple(bool, str):
+    def is_server_running(self, serverip, serverport, timeout) -> tuple[bool, str]:
         """Test the connection to the server.
         
         Returns:

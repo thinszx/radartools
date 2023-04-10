@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import os.path as osp
 
-from config import BaseConfig
+from .base_config import BaseConfig
 
 class JSONConfig(BaseConfig):
     """ This class is used to load the configuration file. """

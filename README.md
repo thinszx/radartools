@@ -9,12 +9,20 @@
 
 ## Installation
 
-@ TODO
+Install this repo as package `radartools` with following command:
+```bash
+pip install git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main#subdirectory=radartools
+```
+
+If you want to use GPU, use following command instead:
+```bash
+pip install git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main#subdirectory=radartools[gpu]
+```
 
 ## Features
 
 - [x] Detailed examples.
-- [ ] Supply as Python package.
+- [x] Supply as Python package.
 - [x] Support GPU acceleration.
 - [ ] Export data as multiple types.
 

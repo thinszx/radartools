@@ -2,7 +2,7 @@ import sys
 import importlib
 import os.path as osp
 
-from config import BaseConfig
+from .base_config import BaseConfig
 
 def load_python_config(config_file):
     """ This function is used to load the configuration file. """

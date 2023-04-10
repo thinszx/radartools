@@ -1,7 +1,7 @@
 # path: settings/radardsp.py
 
-from config.python_config import load_python_config
-from radardsp.utils.preprocess.antennas import load_virtual_array_layout
+from radartools.config.python_config import load_python_config
+from radartools.radardsp.utils.preprocess.antennas import load_virtual_array_layout
 
 """     Load capture parameters     """
 _ = './read2243.py'

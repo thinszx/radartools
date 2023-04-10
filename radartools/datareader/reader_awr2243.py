@@ -8,7 +8,7 @@ import numpy as np
 import os.path as osp
 from datetime import timedelta, datetime
 
-from config import BaseConfig
+from ..config.base_config import BaseConfig
 
 class AWR2243Reader():
     """AWR2243 data reader class."""
