@@ -11,12 +11,12 @@
 
 Install this repo as package `radartools` with following command:
 ```bash
-pip install git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main#subdirectory=radartools
+pip install "radartools @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
 ```
 
 If you want to use GPU, use following command instead:
 ```bash
-pip install git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main#subdirectory=radartools[gpu]
+pip install "radartools[gpu] @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
 ```
 
 ## Features
