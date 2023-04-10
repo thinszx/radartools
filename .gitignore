@@ -1,5 +1,7 @@
 # python cache
 __pycache__/
+build/
+*.egg-info/
 
 # IDE files
 .vscode/
