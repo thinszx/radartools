@@ -24,6 +24,8 @@ class AWR2243Reader():
                             - slave3_XXXX_data.bin, slave3_XXXX_idx.bin
 
         """
+        if not osp.exists(workdir):
+            raise ValueError(f"Directory {workdir} does not exist.")
         self.workdir = workdir
 
         # set the parameters of radar cube

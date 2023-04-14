@@ -1,21 +1,21 @@
 import numpy as np
 import scipy.io as sio
 
-def apply2243_calib_vector_iplab(frame_2243, calibmat_path) -> np.ndarray:
+def apply2243_calib_vector_iplab(frame_2243, calib_mat) -> np.ndarray:
     """load and apply the phase and frequency calibration data from the given filename
     TODO: add phase
 
     Args:
         frame_2243 (np.ndarray): 4D array containing the raw data from AWR2243,
                                  with shape (nsamples, nloops, 16, 12)
-        calibmat_path (str): Path of mat file containing the calibration data
+        calib_mat (dict): Dict of loaded mat file containing the calibration data
 
     Returns:
         calibratated_frame (np.ndarray): 4D array containing the calibrated data,
                                          with shape (nsamples, nloops, 16, 12)
     """
     # load the calibration matrix
-    calib_mat = sio.loadmat(calibmat_path)
+    # calib_mat = sio.loadmat(calibmat_path) # avoid loading the file multiple times
     frequency_calibration_vector = calib_mat['caliBatchMat'][0][0][0][0].reshape(-1, 1)
     phase_calibration_vector = calib_mat['caliBatchMat'][0][0][1][0].reshape(-1, 1)
 

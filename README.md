@@ -10,13 +10,21 @@
 ## Installation
 
 Install this repo as package `radartools` with following command:
+
 ```bash
 pip install "radartools @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
 ```
 
-If you want to use GPU, use following command instead:
+If you want to use GPU to accelerate calculation, use the following command instead:
+
 ```bash
 pip install "radartools[gpu] @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
+```
+
+To use the tool funtions to export data as npy/png/mp4 formats, install the package:
+
+```bash
+conda install -c conda-forge ffmpeg openh264
 ```
 
 ## Features
@@ -24,13 +32,26 @@ pip install "radartools[gpu] @ git+http://iplab-ustc.site/gitlab/thinszx/radarto
 - [x] Detailed examples.
 - [x] Supply as Python package.
 - [x] Support GPU acceleration.
-- [ ] Export data as multiple types.
+
+## Tools
+
+- [x] Export data as npy/png/mp4 formats.
+- [x] Performace evaluation.
 
 ## Examples
 
 - [x] 2D Beamforming
 - [x] AWR2243 layout
 - [x] Point cloud generation with 4-D FFT (reorganizing codes, not released yet)
+
+## Beamforming Performance
+
+Processing on AWR2243 master&slaves files with 1 loop, 256 range bins, 20 fps and 1 minutes in total (BOTH with GPU acceleration):
+
+- MATLAB version: ~40s
+- Python version: ~10s
+
+It's 4 times faster than MATLAB version :D.
 
 ## Credits
 
