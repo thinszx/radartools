@@ -44,15 +44,6 @@ conda install -c conda-forge ffmpeg openh264
 - [x] AWR2243 layout
 - [x] Point cloud generation with 4-D FFT (reorganizing codes, not released yet)
 
-## Beamforming Performance
-
-Processing on AWR2243 master&slaves files with 1 loop, 256 range bins, 20 fps and 1 minutes in total (BOTH with GPU acceleration):
-
-- MATLAB version: ~40s
-- Python version: ~10s
-
-It's 4 times faster than MATLAB version :D.
-
 ## Credits
 
 - <https://github.com/azinke/mmwave-repack>
