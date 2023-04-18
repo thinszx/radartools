@@ -24,6 +24,7 @@ class RadarClient:
         self.password = password
         self.timeout = timeout
         
+        self.ssh_client = None
         self.ssh_client = self.__get_ssh_connect()
         self.server_stdin = None
         self.server_stdout = None
@@ -31,8 +32,8 @@ class RadarClient:
 
     
     def __del__(self):
-        if self.client is not None:
-            self.client.close()
+        if self.ssh_client is not None:
+            self.ssh_client.close()
 
     def __get_ssh_connect(self):
         if self.ssh_client is None:
