@@ -12,13 +12,13 @@
 Install this repo as package `radartools` with following command:
 
 ```bash
-pip install "radartools @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
+pip install "radartools @ git+https://github.com/thinszx/radartools.git@main"
 ```
 
 If you want to use GPU to accelerate calculation, use the following command instead:
 
 ```bash
-pip install "radartools[gpu] @ git+http://iplab-ustc.site/gitlab/thinszx/radartools.git@main"
+pip install "radartools[gpu] @ git+https://github.com/thinszx/radartools.git@main"
 ```
 
 To use the tool funtions to export data as npy/png/mp4 formats, install the package:
